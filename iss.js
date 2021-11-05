@@ -63,6 +63,28 @@ const isspassing = function (infos , callback) {
   });
 }
 
+const nextISSTimesForMyLocation = function (callback) {
+  fetchMyIP((error, ip) => {
+    if (error) {
+      callback(error);
+      return;
+    }
 
+    fetchCoordsByIP(ip, (error, data) => {
+      if (error) {
+        callback(error);
+        return;
+      }
+  
+      isspassing(data, (error, passtimes) => {
+        if (error) {
+          callback(error);
+          return;
+        }
+        callback(null , passtimes);
+      });
+    });
+  });
+}
 
-module.exports = { fetchMyIP, fetchCoordsByIP, isspassing };
+module.exports = nextISSTimesForMyLocation;
